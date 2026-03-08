@@ -48,92 +48,151 @@ $users = $userObj->getAllUsers();
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Users Management</title>
-    <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+<title>Users Management</title>
+
+<link rel="stylesheet" href="../style.css">
+
 </head>
+
 <body>
 
-    <div class="sidebar">
-        <h2>MYSHOP</h2>
-        <a href="admin.php">Dashboard</a>
-        <a href="admin_users.php">Users</a>
-        <a href="#">Products</a>
-        <a href="#">Orders</a>
-        <a href="logout.php">Logout</a>
-    </div>
+<div class="admin-layout">
 
-    <div class="header">
-        <h1>
-            Users Management
-            <a href="logout.php" class="logout">Logout</a>
-        </h1>
-        <p>Welcome <?= htmlspecialchars($_SESSION['username']) ?></p>
-    </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-    <div class="table-container">
+<h2>MYSHOP</h2>
 
-        <?php if ($message): ?>
-            <p><strong><?= htmlspecialchars($message) ?></strong></p>
-        <?php endif; ?>
+<a href="admin.php">Dashboard</a>
+<a href="admin_users.php" class="active">Users</a>
+<a href="admin_products.php">Products</a>
+<a href="add_categorie.php">Categories</a>
+<a href="logout.php">Logout</a>
 
-        <?php if ($editUser): ?>
-            <div class="form-box">
-                <h3>Edit User</h3>
-                <form method="POST">
-                    <input type="hidden" name="id" value="<?= $editUser['id'] ?>">
-                    
-                    <input type="text" name="username" 
-                           value="<?= htmlspecialchars($editUser['username']) ?>" required>
-                    
-                    <input type="email" name="email" 
-                           value="<?= htmlspecialchars($editUser['email']) ?>" required>
-                    
-                    <label>
-                        <input type="checkbox" name="admin" <?= $editUser['admin'] ? "checked" : "" ?>>
-                        Administrator
-                    </label>
-                    
-                    <br><br>
-                    
-                    <button type="submit" name="update_user">Update User</button>
-                </form>
-            </div>
-        <?php endif; ?>
+</div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Admin</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($users as $user): ?>
-                    <tr>
-                        <td><?= $user['id'] ?></td>
-                        <td><?= htmlspecialchars($user['username']) ?></td>
-                        <td><?= htmlspecialchars($user['email']) ?></td>
-                        <td><?= $user['admin'] ? "Yes" : "No" ?></td>
-                        <td>
-                            <a class="btn btn-edit" href="?edit=<?= $user['id'] ?>">Edit</a>
-                            
-                            <?php if ($user['id'] != $_SESSION['user_id']): ?>
-                                <a class="btn btn-delete" 
-                                   href="?delete=<?= $user['id'] ?>" 
-                                   onclick="return confirm('Delete this user?')">
-                                   Delete
-                                </a>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+
+<!-- MAIN -->
+<div class="main-content">
+
+<div class="header">
+
+<h1>Users Management</h1>
+
+<p>Welcome <?= htmlspecialchars($_SESSION['username']) ?></p>
+
+</div>
+
+
+<div class="container">
+
+<?php if ($message): ?>
+<p class="alert"><?= htmlspecialchars($message) ?></p>
+<?php endif; ?>
+
+
+<?php if ($editUser): ?>
+
+<div class="form-box">
+
+<h3>Edit User</h3>
+
+<form method="POST">
+
+<input type="hidden" name="id" value="<?= $editUser['id'] ?>">
+
+<input type="text"
+name="username"
+value="<?= htmlspecialchars($editUser['username']) ?>"
+required>
+
+<input type="email"
+name="email"
+value="<?= htmlspecialchars($editUser['email']) ?>"
+required>
+
+<label>
+
+<input type="checkbox"
+name="admin"
+<?= $editUser['admin'] ? "checked" : "" ?>>
+
+Administrator
+
+</label>
+
+<button type="submit" name="update_user">
+Update User
+</button>
+
+</form>
+
+</div>
+
+<?php endif; ?>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Username</th>
+<th>Email</th>
+<th>Admin</th>
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<?php foreach ($users as $user): ?>
+
+<tr>
+
+<td><?= $user['id'] ?></td>
+<td><?= htmlspecialchars($user['username']) ?></td>
+<td><?= htmlspecialchars($user['email']) ?></td>
+<td><?= $user['admin'] ? "Yes" : "No" ?></td>
+
+<td>
+
+<a class="btn-edit"
+href="?edit=<?= $user['id'] ?>">Edit</a>
+
+<?php if ($user['id'] != $_SESSION['user_id']): ?>
+
+<a class="btn-delete"
+href="?delete=<?= $user['id'] ?>"
+onclick="return confirm('Delete this user?')">
+
+Delete
+
+</a>
+
+<?php endif; ?>
+
+</td>
+
+</tr>
+
+<?php endforeach; ?>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>

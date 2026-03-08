@@ -25,29 +25,29 @@ class Products {
         return $reponse->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create($name, $description, $price, $image) {
-        $requete = "INSERT INTO products(name, description, price, image) 
-                    VALUES(:name, :description, :price, :image)";
+   public function create($name, $description, $price, $picture) {
+        $requete = "INSERT INTO products(name, description, price, picture) 
+                    VALUES(:name, :description, :price, :picture)";
         $reponse = $this->conn->prepare($requete);
         return $reponse->execute([
             ':name' => $name,
             ':description' => $description,
             ':price' => $price,
-            ':image' => $image
+            ':picture' => $picture 
         ]);
     }
 
-    public function update($id, $name, $description, $price, $image) {
+   public function update($id, $name, $description, $price, $picture) {
         $requete = "UPDATE products 
-                    SET name=:name, description=:description, price=:price, image=:image 
-                    WHERE id=:id";
+                    SET name=:name, description=:description, price=:price, picture=:picture
+                    WHERE id=:id"; 
         $reponse = $this->conn->prepare($requete);
         return $reponse->execute([
             ':id' => $id,
             ':name' => $name,
             ':description' => $description,
             ':price' => $price,
-            ':image' => $image
+            ':picture' => $picture 
         ]);
     }
 
@@ -57,39 +57,59 @@ class Products {
         return $reponse->execute([':id' => $id]);
     }
 
+    /* RECHERCHE CORRIGÉE */
+
     public function searchProducts($name, $category, $price, $sort) {
-        $sql = "SELECT * FROM products WHERE 1=1";
+
+        $sql = "SELECT products.*, categories.name AS category_name
+                FROM products
+                LEFT JOIN categories ON products.id_category = categories.id
+                WHERE 1=1";
+
         $params = [];
 
         if(!empty($name)) {
-            $sql .= " AND name LIKE ?";
+            $sql .= " AND products.name LIKE ?";
             $params[] = "%$name%";
         }
 
+        if(!empty($category)) {
+            $sql .= " AND categories.name LIKE ?";
+            $params[] = "%$category%";
+        }
+
         if(!empty($price)) {
-            $sql .= " AND price <= ?";
+            $sql .= " AND products.price <= ?";
             $params[] = $price;
         }
 
         if(!empty($sort)) {
+
             switch($sort) {
+
                 case "name_asc":
-                    $sql .= " ORDER BY name ASC";
+                    $sql .= " ORDER BY products.name ASC";
                     break;
+
                 case "name_desc":
-                    $sql .= " ORDER BY name DESC";
+                    $sql .= " ORDER BY products.name DESC";
                     break;
+
                 case "price_asc":
-                    $sql .= " ORDER BY price ASC";
+                    $sql .= " ORDER BY products.price ASC";
                     break;
+
                 case "price_desc":
-                    $sql .= " ORDER BY price DESC";
+                    $sql .= " ORDER BY products.price DESC";
                     break;
+
             }
         }
 
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($params);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 }

@@ -21,18 +21,57 @@ $categories = $category->getAll();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Ajouter catégorie</title>
+
+<link rel="stylesheet" href="../style.css">
+
 </head>
 
 <body>
+
+<div class="admin-layout">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>MYSHOP</h2>
+
+<a href="admin.php">Dashboard</a>
+<a href="admin_users.php">Users</a>
+<a href="admin_products.php">Products</a>
+<a href="add_categorie.php" class="active">Categories</a>
+<a href="logout.php">Logout</a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main-content">
+
+<div class="header">
+
+<h1>Categories</h1>
+
+</div>
+
+
+<div class="container">
 
 <h2>Ajouter une catégorie</h2>
 
 <form method="POST">
 
-<input type="text" name="name" placeholder="Nom de la catégorie" required>
+<input type="text"
+name="name"
+placeholder="Nom de la catégorie"
+required>
+
 
 <select name="parent_id">
 
@@ -48,13 +87,15 @@ $categories = $category->getAll();
 
 </select>
 
+
 <button type="submit">Ajouter</button>
 
 </form>
 
+
 <h3>Liste des catégories</h3>
 
-<table border="1">
+<table>
 
 <tr>
 <th>Nom catégorie</th>
@@ -73,6 +114,12 @@ $categories = $category->getAll();
 <?php endforeach; ?>
 
 </table>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>

@@ -56,13 +56,13 @@ if($username){
         </p>
         <div ><img src="../assets/menu.png" alt="" class="menu"></div>
     </nav>
-     <div class="search-container">
+   <div class="search-container">
 
 <form action="search.php" method="GET" class="search-bar">
 
 <input type="text" name="name" placeholder="Product name">
 
-<input type="text" name="category" placeholder="Category">
+<input type="text" name="category" placeholder="Category name">
 
 <input type="number" name="price" placeholder="Max price">
 
@@ -87,26 +87,7 @@ if($username){
                
 
     </header>
-    <!-- </?php function afficherP(){
-        require_once("bd.php");
-            $database = new BD;
-            $db = $database->getConnect();
-            $sql = "SELECT * FROM  products";
-
-           $stmt = $db->prepare($sql);
-           $stmt->execute();
-
-            $data = $stmt->fetchALL(PDO::FETCH_OBJ);
-            $stmt->closeCursor();
-            return $data;
-
-       
-    }
-    ?>
-    </?php
-    $produits = afficherP();
-
-    ?> -->
+   
     <section>
         <h2 class="produit" id="produit">NOS PRODUIT</h2>
 
