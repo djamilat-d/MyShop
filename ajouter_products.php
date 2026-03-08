@@ -14,20 +14,20 @@ if(isset($_POST['submit'])){
     $name=$_POST['name'];
     $description=$_POST['description'];
     $price=$_POST['price'];
-    $image_name='';
+    $picture_name='';
 
     if(empty($name) || empty($description) || empty($price)){
         $message_erreur = "Tous les champs sont obligatoires.";
     }elseif($price <=0){
         $message_erreur="le prix doit etre superieur a 0";
     }else{
-        if($_FILES['image']['error']==0){
+        if($_FILES['picture']['error']==0){
     
-            $image_name = time() . '_' . $_FILES['image']['name'];
-            move_uploaded_file($_FILES['image']['tmp_name'], '../images/' . $image_name);
+            $picture_name = time() . '_' . $_FILES['picture']['name'];
+            move_uploaded_file($_FILES['picture']['tmp_name'], '../images/' . $picture_name);
         }
         $productModel= new Products();
-        $productModel->create($name,$description,$price,$image_name);
+        $productModel->create($name,$description,$price,$picture_name);
         header("Location: admin_products.php?success=1");
         exit();
     }
@@ -62,7 +62,7 @@ if(isset($_POST['submit'])){
 
         <div class="mb-3">
             <label>Description</label>
-            
+            <!-- <input type="text" name="description" required> -->
             <textarea class="form-control" name="description" id="" required></textarea>
         </div>
 
@@ -73,7 +73,7 @@ if(isset($_POST['submit'])){
 
         <div class="mb-3">
             <label>Image du produit</label>
-            <input class="form-control" type="file" name="image">
+            <input class="form-control" type="file" name="picture">
         </div>
 
         <button class="btn btn-primary" type="submit" name="submit">Enregistrer</button>

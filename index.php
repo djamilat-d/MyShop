@@ -1,6 +1,8 @@
 <?php
 session_start();
-require_once "User.php";
+require_once "product.php";
+$productModel = new Products();
+$produits = $productModel->getAll();
 
 $message ="";
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : null;
@@ -14,7 +16,7 @@ if($username){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <title>Document</title>
     
 </head>
@@ -45,17 +47,16 @@ if($username){
            ?>
             <a href="admin.php" class="btndcon">Administrateur</a>
 
-           <a href="inscription.php" class="btndcon">S'inscrire</a>
-           <a href="login.php" class="btndcon">Se connecter</a>
+           <a href="signup.php" class="btndcon">S'inscrire</a>
+           <a href="signin.php" class="btndcon">Se connecter</a>
             <?php endif;?>
         </div>
         <p>
 
         </p>
-        <div ><img src="image/menu.png" alt="" class="menu"></div>
+        <div ><img src="../assets/menu.png" alt="" class="menu"></div>
     </nav>
-    /*barre de recherche*/
-    <div class="search-container">
+     <div class="search-container">
 
 <form action="search.php" method="GET" class="search-bar">
 
@@ -81,15 +82,15 @@ if($username){
 
 </div>
     <header >
-                <img src="image/luxury2.jpg" alt="" class="heard" >
+                <img src="../assets/luxury2.jpg" alt="" class="heard" >
 
                
 
     </header>
-    <?php function afficherP(){
-        require_once("db.php");
-            $database = new connect_db;
-            $db = $database->connect();
+    <!-- </?php function afficherP(){
+        require_once("bd.php");
+            $database = new BD;
+            $db = $database->getConnect();
             $sql = "SELECT * FROM  products";
 
            $stmt = $db->prepare($sql);
@@ -102,10 +103,10 @@ if($username){
        
     }
     ?>
-    <?php
+    </?php
     $produits = afficherP();
 
-    ?>
+    ?> -->
     <section>
         <h2 class="produit" id="produit">NOS PRODUIT</h2>
 
@@ -116,15 +117,15 @@ if($username){
         <div class="card">
 
             <div class="Coombes">
-                <img src="./assets/<?= $produit->picture ?> "alt="" class="img">
+                <img src="../images/<?= $produit['picture'] ?> "alt="" class="img">
 
                 <div class="info">
-                    <h2><?= $produit->name ?> </h2>
-                    <span class="price"><?= $produit->price ?> FCFA</span>
+                    <h2><?= $produit['name'] ?> </h2>
+                    <span class="price"><?= $produit['price'] ?> FCFA</span>
                 </div>
 
                 <h3>LOUNGE</h3>
-                <div class="description"><?= $produit->description ?> </div>
+                <div class="description"><?= $produit['description'] ?> </div>
                 <button class="achat">Acheter</button>
             </div>
         </div>

@@ -6,13 +6,14 @@ if(!isset($_SESSION['user_id']) ||
     header('Location: signin.php');
     exit();
 }
-
 include_once 'product.php';
+
 
 $productModel= new Products();
 
 $id = $_GET['id'];
 $produit = $productModel->getId($id);
+
 if (!$produit) {
     header("Location: admin_products.php");
     exit();
@@ -24,15 +25,15 @@ if(isset($_POST['submit'])){
     $name=$_POST['name'];
     $description=$_POST['description'];
     $price=$_POST['price'];
-    $image_name=$produit['image'];
+    $picture_name=$produit['picture'];
     if(empty($name) || empty($description) || empty($price)){
         $message_erreur = "Tous les champs sont obligatoires.";
     }else{
-        if($_FILES['image']['error'] ==0){
-            $image_name = time() . '_' . $_FILES['image']['name'];
-            move_uploaded_file($_FILES['image']['tmp_name'], '../images/' . $image_name);
+        if($_FILES['picture']['error'] ==0){
+            $picture_name = time() . '_' . $_FILES['picture']['name'];
+            move_uploaded_file($_FILES['picture']['tmp_name'], '../images/' . $picture_name);
         }
-        $productModel->update($id,$name,$description,$price,$image_name);
+        $productModel->update($id,$name,$description,$price,$picture_name);
         header("Location: admin_products.php?success=1");
         exit();
     }
@@ -72,13 +73,13 @@ if(isset($_POST['submit'])){
 
     <div class="mb-3">
         <label>Image actuelle du produit</label>
-        <?php if (!empty($produit['image'])) { ?>
-                <img src="../images/<?php echo $produit['image']; ?>" class="rounded" style="width:auto; height:80px; object-fit:cover; border-radius:5px;"><br>
+        <?php if (!empty($produit['picture'])) { ?>
+                <img src="../images/<?php echo $produit['picture']; ?>" class="rounded" style="width:auto; height:80px; object-fit:cover; border-radius:5px;"><br>
             <?php } else { ?>
                 Pas d'image<br>
             <?php } ?>
         <label class="form-label mt-2">Changer l'image</label>
-        <input class="form-control" type="file" name="image">
+        <input class="form-control" type="file" name="picture">
     </div>
 
     <button class="btn btn-success" type="submit" name="submit">Enregistrer</button>
