@@ -62,6 +62,12 @@ if($username){
         </p>
         <div><img src="/image/menu.png" alt="" class="menu"></div>
     </nav>
+    <header >
+                <img src="../assets/luxury2.jpg" alt="" class="heard" >
+
+               
+
+    </header>
     <div class="search-container">
 
         <form action="search.php" method="GET" class="search-bar">
