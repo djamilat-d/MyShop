@@ -4,7 +4,7 @@ session_start();
 require_once "../models/connexion.php";
 require_once "../models/User.php";
 
-if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
+if (!isset($_SESSION['user_id']) || $_SESSION['is_admin'] != 1) {
     header("Location: signin.php");
     exit();
 }
@@ -60,7 +60,6 @@ $users = $userObj->getAllUsers();
 
 <div class="admin-layout">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 
 <h2>MYSHOP</h2>
@@ -74,7 +73,6 @@ $users = $userObj->getAllUsers();
 </div>
 
 
-<!-- MAIN -->
 <div class="main-content">
 
 <div class="header">

@@ -2,7 +2,7 @@
 session_start();
 
 if(!isset($_SESSION['user_id']) || 
-   (!isset($_SESSION['admin']) && !isset($_SESSION['is_admin']))){
+   (!isset($_SESSION['admin']) && $_SESSION['is_admin'] != 1)){
     header('Location: signin.php');
     exit();
 }
@@ -24,7 +24,7 @@ if(isset($_POST['submit'])){
         if($_FILES['picture']['error']==0){
     
             $picture_name = time() . '_' . $_FILES['picture']['name'];
-            move_uploaded_file($_FILES['picture']['tmp_name'], '../images/' . $picture_name);
+            move_uploaded_file($_FILES['picture']['tmp_name'], 'image/' . $picture_name);
         }
         $productModel= new Products();
         $productModel->create($name,$description,$price,$picture_name);
@@ -63,7 +63,6 @@ if(isset($_POST['submit'])){
 
         <div class="mb-3">
             <label>Description</label>
-            <!-- <input type="text" name="description" required> -->
             <textarea class="form-control" name="description" id="" required></textarea>
         </div>
 

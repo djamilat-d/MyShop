@@ -2,7 +2,7 @@
 session_start();
 require_once "../models/connexion.php";
 
-if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
+if (!isset($_SESSION['user_id']) || $_SESSION['is_admin'] != 1) {
     header("Location: signin.php");
     exit();
 }
@@ -24,7 +24,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
 
 <div class="admin-layout">
 
-<!-- SIDEBAR -->
 
 <div class="sidebar">
 
@@ -40,7 +39,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
 </div>
 
 
-<!-- MAIN CONTENT -->
 
 <div class="main-content">
 

@@ -2,7 +2,7 @@
 session_start();
 
 if(!isset($_SESSION['user_id']) || 
-   (!isset($_SESSION['admin']) && !isset($_SESSION['is_admin']))){
+   (!isset($_SESSION['admin']) && $_SESSION['is_admin'] !=1)){
     header('Location: signin.php');
     exit();
 }
@@ -31,7 +31,7 @@ if(isset($_POST['submit'])){
     }else{
         if($_FILES['picture']['error'] ==0){
             $picture_name = time() . '_' . $_FILES['picture']['name'];
-            move_uploaded_file($_FILES['picture']['tmp_name'], '../images/' . $picture_name);
+            move_uploaded_file($_FILES['picture']['tmp_name'], 'image/' . $picture_name);
         }
         $productModel->update($id,$name,$description,$price,$picture_name);
         header("Location: admin_products.php?success=1");
@@ -74,7 +74,7 @@ if(isset($_POST['submit'])){
     <div class="mb-3">
         <label>Image actuelle du produit</label>
         <?php if (!empty($produit['picture'])) { ?>
-                <img src="../images/<?php echo $produit['picture']; ?>" class="rounded" style="width:auto; height:80px; object-fit:cover; border-radius:5px;"><br>
+                <img src="image/<?php echo $produit['picture']; ?>" class="rounded" style="width:auto; height:80px; object-fit:cover; border-radius:5px;"><br>
             <?php } else { ?>
                 Pas d'image<br>
             <?php } ?>

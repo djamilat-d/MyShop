@@ -57,7 +57,6 @@ class Products {
         return $reponse->execute([':id' => $id]);
     }
 
-    /* RECHERCHE CORRIGÉE */
 
     public function searchProducts($name, $category, $price, $sort) {
 

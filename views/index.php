@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+include_once '../models/product.php';
+
+$productModel = new Products();
+$produits = $productModel->getAll();
+
 $message ="";
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : null;
 if($username){
@@ -14,7 +19,7 @@ if($username){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styless.css">
+    <link rel="stylesheet" href="styless.css">
     <title>Document</title>
 
 </head>
@@ -48,8 +53,8 @@ if($username){
            ?>
             <a href="admin.php" class="btndcon">Administrateur</a>
 
-            <a href="inscription.php" class="btndcon">S'inscrire</a>
-            <a href="login.php" class="btndcon">Se connecter</a>
+            <a href="signin.php" class="btndcon">S'inscrire</a>
+            <a href="signup.php" class="btndcon">Se connecter</a>
             <?php endif;?>
         </div>
         <p>
@@ -113,15 +118,15 @@ if($username){
             <div class="card">
 
                 <div class="Coombes">
-                    <img src="/assets/<?= $produit->picture ?> " alt="Image produit <?= $produit->id ?>  " class="img">
+                    <img src="image/<?= $produit['picture'] ?> " alt="Image produit <?= $produit['id'] ?>  " class="img">
 
                     <div class="info">
-                        <h2><?= $produit->name ?> </h2>
-                        <span class="price"><?= $produit->price ?> FCFA</span>
+                        <h2><?= $produit['name'] ?> </h2>
+                        <span class="price"><?= $produit['price'] ?> FCFA</span>
                     </div>
 
-                    <h3><?= $category->name ?></h3>
-                    <div class="description"><?= $produit->description ?> </div>
+                    <h3><?= $category['name'] ?></h3>
+                    <div class="description"><?= $produit['description'] ?> </div>
                     <button class="achat">Acheter</button>
                 </div>
             </div>
@@ -143,7 +148,7 @@ if($username){
                     <div class="icon">1</div>
                     <div class="descriptions">
                         <h4>Le penthouse</h4>
-                        <p>enthouses, grands appartements en dernier étage.</p>
+                        <p>penthouses, grands appartements en dernier étage.</p>
                     </div>
                 </div>
 
@@ -155,7 +160,7 @@ if($username){
                     <div class="icon">2</div>
                     <div class="descriptions">
                         <h4>Le penthouse</h4>
-                        <p>enthouses, grands appartements en dernier étage.</p>
+                        <p>penthouses, grands appartements en dernier étage.</p>
                     </div>
                 </div>
 
@@ -167,7 +172,7 @@ if($username){
                     <div class="icon">3</div>
                     <div class="descriptions">
                         <h4>Le penthouse</h4>
-                        <p>enthouses, grands appartements en dernier étage.</p>
+                        <p>penthouses, grands appartements en dernier étage.</p>
                     </div>
                 </div>
 
@@ -179,7 +184,7 @@ if($username){
                     <div class="icon">4</div>
                     <div class="descriptions">
                         <h4>Le penthouse</h4>
-                        <p>enthouses, grands appartements en dernier étage.</p>
+                        <p>penthouses, grands appartements en dernier étage.</p>
                     </div>
                 </div>
 
@@ -191,7 +196,7 @@ if($username){
                     <div class="icon">5</div>
                     <div class="descriptions">
                         <h4>Le penthouse</h4>
-                        <p>enthouses, grands appartements en dernier étage.</p>
+                        <p>penthouses, grands appartements en dernier étage.</p>
                     </div>
                 </div>
 
@@ -203,7 +208,7 @@ if($username){
                     <div class="icon">6</div>
                     <div class="descriptions">
                         <h4>Le penthouse</h4>
-                        <p>enthouses, grands appartements en dernier étage.</p>
+                        <p>penthouses, grands appartements en dernier étage.</p>
                     </div>
                 </div>
 

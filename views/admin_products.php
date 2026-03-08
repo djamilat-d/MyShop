@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-// Vérification admin cohérente
-if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
+if (!isset($_SESSION['user_id']) || $_SESSION['is_admin'] != 1) {
     header("Location: signin.php");
     exit();
 }
@@ -19,14 +18,12 @@ $produits = $productModel->getAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Produits - MyShop</title>
-    <!-- Utilisation de ton fichier CSS pour la sidebar -->
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
 <div class="admin-layout">
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h2>MYSHOP</h2>
         <a href="admin.php">Dashboard</a>
@@ -36,7 +33,6 @@ $produits = $productModel->getAll();
         <a href="logout.php">Logout</a>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="main-content">
         
         <div class="header">
@@ -75,8 +71,8 @@ $produits = $productModel->getAll();
                             <tr>
                                 <td><?= $produit['id']; ?></td>
                                 <td>
-                                    <?php if(!empty($produit['image'])): ?>
-                                        <img src="../images/<?= $produit['image'];?>" alt="<?= htmlspecialchars($produit['name']); ?>" style="width:60px; height:60px; object-fit:cover; border-radius:5px;">
+                                    <?php if(!empty($produit['picture'])): ?>
+                                        <img src="image/<?= $produit['picture'];?>" alt="<?= htmlspecialchars($produit['name']); ?>" style="width:60px; height:60px; object-fit:cover; border-radius:5px;">
                                     <?php else: ?>
                                         <span style="color: #999; font-size: 0.8em;">Pas d'image</span>
                                     <?php endif; ?>

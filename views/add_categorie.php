@@ -35,7 +35,6 @@ $categories = $category->getAll();
 
 <div class="admin-layout">
 
-<!-- SIDEBAR -->
 
 <div class="sidebar">
 
@@ -50,7 +49,6 @@ $categories = $category->getAll();
 </div>
 
 
-<!-- MAIN -->
 
 <div class="main-content">
 

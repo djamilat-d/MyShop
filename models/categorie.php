@@ -10,7 +10,6 @@ class Category {
         $this->conn = $db->getConnect();
     }
 
-    /* ajouter une catégorie */
     public function add($name, $parent = null){
 
         $sql = "INSERT INTO categories (name, parent_id) VALUES (:name, :parent)";
@@ -23,7 +22,6 @@ class Category {
         ]);
     }
 
-    /* récupérer toutes les catégories */
 
     public function getAll(){
 
