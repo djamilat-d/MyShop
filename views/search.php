@@ -1,5 +1,5 @@
 <?php
-require_once 'connexion.php';
+require_once '../models/connexion.php';
 
 $name  = $_GET['name'] ?? '';
 $price = $_GET['price'] ?? '';

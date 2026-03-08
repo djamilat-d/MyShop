@@ -7,7 +7,7 @@ if(!isset($_SESSION['user_id']) ||
     exit();
 }
 
-include_once 'product.php';
+include_once '../models/product.php';
 
 $productModel = new Products();
 $produits = $productModel->getAll();
@@ -56,7 +56,7 @@ $produits = $productModel->getAll();
                 <td><?php echo $produit['price']; ?> Frcfa</td>
                 <td>
                     <a href="edit_products.php?id=<?php echo $produit['id']; ?>" class="btn btn-warning btn-sm">Modifier</a>
-                    <a href="delete_products.php?id=<?php echo $produit['id'];?>" class="btn btn-danger btn-sm" onclick="return confirm('voulez-vous vraiment supprimer ce produit?')">supprimer</a>
+                    <a href="../controllers/delete_products.php?id=<?php echo $produit['id'];?>" class="btn btn-danger btn-sm" onclick="return confirm('voulez-vous vraiment supprimer ce produit?')">supprimer</a>
                 </td>
             </tr>
             <?php } ?>

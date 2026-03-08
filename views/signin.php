@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'connexion.php';
+require '../models/connexion.php';
 
 $message = "";
 $email   = "";

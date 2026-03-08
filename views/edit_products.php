@@ -6,7 +6,7 @@ if(!isset($_SESSION['user_id']) ||
     header('Location: signin.php');
     exit();
 }
-include_once 'product.php';
+include_once '../models/product.php';
 
 
 $productModel= new Products();

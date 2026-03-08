@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "connexion.php";
+require_once "../models/connexion.php";
 
 if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
     header("Location: signin.php");

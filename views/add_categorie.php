@@ -1,6 +1,6 @@
 <?php
-require_once "connexion.php";
-require_once "categorie.php";
+require_once "../models/connexion.php";
+require_once "../models/categorie.php";
 
 $category = new Category();
 

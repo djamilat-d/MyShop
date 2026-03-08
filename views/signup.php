@@ -1,6 +1,6 @@
 <?php
-require 'connexion.php';
-require 'User.php';
+require '../models/connexion.php';
+require '../models/User.php';
 
 $userModel = new User($pdo);
 

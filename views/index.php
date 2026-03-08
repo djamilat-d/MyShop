@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "product.php";
+require_once "../models/product.php";
 $productModel = new Products();
 $produits = $productModel->getAll();
 
