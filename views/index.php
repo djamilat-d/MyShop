@@ -53,14 +53,14 @@ if($username){
            ?>
             <a href="admin.php" class="btndcon">Administrateur</a>
 
-            <a href="signin.php" class="btndcon">S'inscrire</a>
-            <a href="signup.php" class="btndcon">Se connecter</a>
+            <a href="signup.php" class="btndcon">S'inscrire</a>
+            <a href="signin.php" class="btndcon">Se connecter</a>
             <?php endif;?>
         </div>
         <p>
 
         </p>
-        <div><img src="/image/menu.png" alt="" class="menu"></div>
+        <div><img src="image/menu.png" alt="" class="menu"></div>
     </nav>
     <header >
                 <img src="../assets/luxury2.jpg" alt="" class="heard" >

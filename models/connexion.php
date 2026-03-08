@@ -5,7 +5,7 @@ class BD {
     private $host = "localhost";
     private $dbname = "my_shop";
     private $username = "root";
-    private $password = "Akanoam";
+    private $password = "";
     private $conn = null;
 
     public function getConnect(){
