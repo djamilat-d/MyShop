@@ -1,6 +1,7 @@
 <?php
 session_start();
-require '../models/connexion.php';
+require '../models/User.php';
+
 
 $message = "";
 $email   = "";
@@ -10,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass  = $_POST['password'];
 
     if (empty($email) || empty($pass)) {
-        $message = "All fields are required.";
+        $message = "Veuillez obligatoirement remplir ces champs.";
     } else {
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -19,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user && password_verify($pass, $user['password'])) {
             $_SESSION['user_id']  = $user['id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['admin']    = $user['admin'];
+            $_SESSION['is_admin']    = $user['admin'];
 
             if ($user['admin'] == 1) {
                 header("Location: admin.php");

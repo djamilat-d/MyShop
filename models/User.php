@@ -1,5 +1,5 @@
 <?php
-
+include_once 'connexion.php';
 class User {
 
     private $pdo;
