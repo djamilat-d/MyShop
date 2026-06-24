@@ -12,9 +12,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $pass = $_POST['password'];
+    // $confirm_pass =$_POST['confirm_password'];
     $admin = isset($_POST['admin']) ? 1 : 0;
-
     $message = $userModel->createUser($name, $email, $pass, $admin);
+    header("Location: signin.php");
+
+    // if($pass !== $confirm_pass){
+    //     $message = "impossible";
+    // }else{
+    //     $message = $userModel->createUser($name, $email, $pass, $admin);
+
+    //     if($message === "Account created successfully."){
+    //         header("Location: index.php");
+    //         exit();
+    //     }
+
+    // }
 }
 ?>
 
