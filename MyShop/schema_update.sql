@@ -1,0 +1,2 @@
+-- Fichier non utilisé : pas de migration SQL gardée dans le projet.
+-- Modifications appliquées directement dans phpMyAdmin sur la base my_shop.

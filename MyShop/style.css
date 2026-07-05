@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -28,6 +30,24 @@ body {
     color: white;
     margin-bottom: 30px;
     text-align: center;
+}
+
+/* Même logo que sur la page d'accueil (index.php), adapté au fond sombre
+   de la sidebar : on garde l'orange pour le "M" et le "s" (les initiales
+   qui font la signature du logo), et du blanc à la place du gris foncé
+   utilisé sur le fond clair de la navbar, sinon le texte serait illisible. */
+.sidebar-logo {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 20px;
+}
+
+.sidebar-logo .styleM,
+.sidebar-logo .styleS {
+    color: rgb(255, 89, 0);
+}
+
+.sidebar-logo .style {
+    color: white;
 }
 
 .sidebar a {
@@ -218,7 +238,9 @@ tr:hover {
     box-shadow: 0 3px 10px rgba(0,0,0,0.05);
 }
 
-.form-box input {
+.form-box input,
+.form-box select,
+.form-box textarea {
 
     width: 100%;
 
@@ -229,6 +251,10 @@ tr:hover {
     border: 1px solid #ddd;
 
     border-radius: 5px;
+
+    font-family: inherit;
+
+    font-size: 14px;
 }
 
 .form-box button {
@@ -451,3 +477,179 @@ tr:hover {
 .btn-buy:hover { background: #3b82f6; }
 
 .welcome-msg { margin-right: 15px; font-style: italic; color: #666; }
+
+/* --- Page "Gestion des produits" (admin_products.php) ---
+   Cette page réutilisait .container (une grille pensée pour des cartes)
+   pour afficher un simple tableau, donc tout paraissait un peu vide et
+   sans hiérarchie visuelle. On ajoute ici des classes dédiées plutôt que
+   de continuer à empiler des style="..." inline dans le HTML. */
+
+.page-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.page-toolbar h2 {
+    color: #1e293b;
+}
+
+.btn-add {
+    background: #22c55e;
+    color: white;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn-add:hover {
+    background: #16a34a;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.empty-state {
+    background: white;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    color: #6b7280;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Le tableau peut devenir plus large que l'écran sur mobile (beaucoup de
+   colonnes) : plutôt que de le laisser déborder et casser la mise en page,
+   on autorise un scroll horizontal seulement sur ce conteneur. */
+.table-wrap {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.table-wrap table {
+    box-shadow: none;
+    margin: 0;
+}
+
+.thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.no-thumb {
+    color: #999;
+    font-size: 0.8em;
+}
+
+/* Petite pastille pour la catégorie : plus lisible qu'un simple texte
+   perdu dans une cellule de tableau. */
+.badge-category {
+    display: inline-block;
+    background: #eef2ff;
+    color: #3b82f6;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.badge-none {
+    color: #9ca3af;
+    font-size: 0.85em;
+}
+
+.price-cell {
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Affiché à la place des boutons Modifier/Supprimer quand le produit
+   appartient à quelqu'un d'autre : on veut que ce soit visible que
+   l'action est volontairement indisponible, pas juste un oubli. */
+.owner-note {
+    color: #9ca3af;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+/* --- Page "Gestion des utilisateurs" et "Ajouter une catégorie" --- */
+
+/* Message neutre (ni franc succès, ni erreur bloquante) : "You cannot
+   delete yourself.", "User updated.", etc. On reste sur un ton neutre
+   plutôt que de deviner s'il faut afficher du vert ou du rouge. */
+.alert-info {
+    background: #eef2ff;
+    color: #3b5bdb;
+    border: 1px solid #dbe4ff;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.badge-admin {
+    display: inline-block;
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* Une case à cocher ne doit pas prendre 100% de largeur comme les champs
+   texte au-dessus (.form-box input) : sinon le mot "Administrateur" se
+   retrouve collé loin de sa case, sur toute la largeur du formulaire. */
+.checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.checkbox-label input {
+    width: auto !important;
+    margin-bottom: 0 !important;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-actions button {
+    flex: 1;
+}
+
+.btn-cancel {
+    color: #6b7280;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.btn-cancel:hover {
+    text-decoration: underline;
+}

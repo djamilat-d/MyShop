@@ -34,7 +34,12 @@ body {
     width: 90%;
     max-width: 1200px;
     background-color: rgb(253, 253, 253);
-    padding: 10px 10px;
+    /* 10px de padding horizontal ne suffisait pas : sur les pages qui n'ont
+       que deux blocs dans la navbar (le logo et un seul lien, comme sur
+       search.php et product_detail.php), justify-content: space-between
+       colle le texte tout contre le bord arrondi de la pilule, donnant
+       l'impression que l'écriture "dépasse" la navbar. */
+    padding: 12px 25px;
     color: rgb(87, 87, 87);
     z-index: 11111;
 }
@@ -43,6 +48,17 @@ body {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+/* Le message de bienvenue ("Hello, ...") est du texte brut à côté du lien
+   "Administrateur" : le gap du flex parent ne suffit pas toujours à bien
+   l'espacer, d'où cette marge dédiée pour être sûr qu'il ne colle jamais
+   au lien précédent. */
+.welcome-msg {
+    margin-left: 15px;
+    margin-right: 5px;
+    font-style: italic;
+    color: rgb(87, 87, 87);
 }
 
 .liste1 {
@@ -129,6 +145,42 @@ a {
     width: 30px;
     cursor: pointer;
     display: none;
+}
+
+
+/* Pages sans grand header/image (recherche, détail produit) */
+
+/* .navbar est en "position: fixed", donc elle ne prend aucune place dans le
+   flux normal de la page : sans cette classe, le contenu qui suit démarre
+   tout en haut de la page et se retrouve caché (ou à moitié visible) sous
+   la navbar. Sur index.php ce n'est pas un problème car la grande image
+   d'en-tête (100vh) fait déjà largement plus de place que la navbar.
+   Ici on réserve nous-mêmes assez d'espace en haut. */
+.page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 130px 20px 60px;
+}
+
+@media(max-width:768px) {
+    .page-content {
+        padding-top: 110px;
+    }
+}
+
+/* Titre de page simple, sans les traits décoratifs de .produit.
+   .produit positionne ses ::before/::after à 35% du bord gauche/droit,
+   ce qui marche pour un texte court et centré ("NOS PRODUIT") mais coupe
+   en plein milieu d'un texte plus long ("Résultats de recherche"),
+   donnant l'effet de texte barré. */
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin: 0 0 30px 0;
+    color: rgb(255, 89, 0);
+    font-family: 'Playfair Display', serif;
 }
 
 

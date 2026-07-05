@@ -11,6 +11,10 @@ class User {
     
     public function createUser($username, $email, $password, $admin = 0) {
 
+        // On vérifie l'email en base AVANT d'essayer d'insérer, plutôt que de
+        // laisser MySQL renvoyer une erreur de contrainte UNIQUE : ça nous
+        // donne un message clair ("Email already exists.") au lieu d'un
+        // plantage brut, comme demandé dans le sujet (messages d'erreur explicites).
         $check = $this->pdo->prepare("SELECT id FROM users WHERE email = ?");
         $check->execute([$email]);
 
@@ -18,6 +22,9 @@ class User {
             return "Email already exists.";
         }
 
+        // On ne stocke jamais le mot de passe en clair : password_hash() avec
+        // l'algo par défaut (bcrypt actuellement) s'occupe du salage et du
+        // hachage. Même si la base fuite un jour, les mots de passe restent protégés.
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $this->pdo->prepare(
@@ -40,11 +47,18 @@ class User {
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // password_verify() recalcule le hash côté serveur et le compare à
+        // celui stocké : on ne peut jamais "déchiffrer" un mot de passe haché,
+        // seulement vérifier qu'il correspond.
         if ($user && password_verify($password, $user['password'])) {
 
+            // C'est ici, et seulement ici, que la session utilisateur démarre.
+            // is_admin est la clé qu'on utilise partout ailleurs (admin.php,
+            // les pages de gestion produits/catégories...) pour savoir si la
+            // personne connectée a le droit d'accéder à l'administration.
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['admin'] = $user['admin'];
+            $_SESSION['is_admin'] = $user['admin'];
 
             return $user;
         }

@@ -2,14 +2,21 @@
 session_start();
 
 include_once '../models/product.php';
+include_once '../models/categorie.php';
 
 $productModel = new Products();
 $produits = $productModel->getAll();
 
+// Pour la barre de recherche : on propose les vraies catégories existantes
+// plutôt qu'un champ texte libre, où le client devait deviner l'orthographe
+// exacte d'une catégorie pour que la recherche fonctionne.
+$categoryModel = new Category();
+$categoriesForSearch = $categoryModel->getAll();
+
 $message ="";
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : null;
 if($username){
-    $message = "Hello, ". htmlspecialchars($username) . "!";
+    $message = " Hello, ". htmlspecialchars($username) . "!";
 }
 ?>
 
@@ -36,23 +43,29 @@ if($username){
 
         </ul>
         <div>
-            <?php 
+            <?php
            if(isset($_SESSION["user_id"])):
            ?>
+            <?php // Le lien vers l'admin n'a de sens que pour un admin : un
+                  // client connecté n'a rien à y faire, donc on ne l'affiche
+                  // plus systématiquement à tout le monde comme avant. ?>
+            <?php if(!empty($_SESSION['is_admin'])): ?>
             <a href="admin.php" class="btndcon">Administrateur</a>
+            <?php endif; ?>
 
-
-            <?php
-           echo $message;
-           ?>
+            <?php // $message est du texte brut (pas un lien), donc le "gap"
+                  // du flex sur ce <div> ne l'espace pas correctement des
+                  // liens à côté : on l'enveloppe dans un span dédié pour
+                  // pouvoir lui donner sa propre marge. ?>
+            <?php if ($message): ?>
+            <span class="welcome-msg"><?php echo $message; ?></span>
+            <?php endif; ?>
             <a href="logout.php" class="btndcon">Se deconnecter</a>
 
-            <?php 
+            <?php
           else:
 
            ?>
-            <a href="admin.php" class="btndcon">Administrateur</a>
-
             <a href="signup.php" class="btndcon">S'inscrire</a>
             <a href="signin.php" class="btndcon">Se connecter</a>
             <?php endif;?>
@@ -74,7 +87,13 @@ if($username){
 
             <input type="text" name="name" placeholder="Product name">
 
-            <input type="text" name="category" placeholder="Category">
+            <select name="category">
+                <option value="">Toutes les catégories</option>
+                <?php foreach($categoriesForSearch as $cat): ?>
+                    <option value="<?= $cat->id ?>"><?= htmlspecialchars($cat->name) ?></option>
+                <?php endforeach; ?>
+                <option value="0">Autre</option>
+            </select>
 
             <input type="number" name="price" placeholder="Max price">
 
@@ -123,7 +142,7 @@ if($username){
 
             <div class="card">
 
-                <div class="Coombes">
+                <a href="product_detail.php?id=<?= $produit['id'] ?>" class="Coombes" style="display:block; text-decoration:none; color:inherit;">
                     <img src="image/<?= $produit['picture'] ?> " alt="Image produit <?= $produit['id'] ?>  " class="img">
 
                     <div class="info">
@@ -131,10 +150,12 @@ if($username){
                         <span class="price"><?= $produit['price'] ?> FCFA</span>
                     </div>
 
-                    <h3><?= $category['name'] ?></h3>
+                    <?php if (!empty($produit['category_name'])): ?>
+                    <h3><?= htmlspecialchars($produit['category_name']) ?></h3>
+                    <?php endif; ?>
                     <div class="description"><?= $produit['description'] ?> </div>
-                    <button class="achat">Acheter</button>
-                </div>
+                </a>
+                <button class="achat">Acheter</button>
             </div>
 
 

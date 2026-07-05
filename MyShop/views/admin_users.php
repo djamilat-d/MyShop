@@ -62,7 +62,7 @@ $users = $userObj->getAllUsers();
 
 <div class="sidebar">
 
-<h2>MYSHOP</h2>
+<h2 class="sidebar-logo"><span class="styleM">M</span>y<span class="style">~</span><span class="styleS">S</span>hop</h2>
 
 <a href="admin.php">Dashboard</a>
 <a href="admin_users.php" class="active">Users</a>
@@ -84,10 +84,14 @@ $users = $userObj->getAllUsers();
 </div>
 
 
-<div class="container">
+<div class="container" style="display: block;">
+
+<div class="page-toolbar">
+<h2>Liste des utilisateurs</h2>
+</div>
 
 <?php if ($message): ?>
-<p class="alert"><?= htmlspecialchars($message) ?></p>
+<p class="alert-info"><?= htmlspecialchars($message) ?></p>
 <?php endif; ?>
 
 
@@ -95,7 +99,7 @@ $users = $userObj->getAllUsers();
 
 <div class="form-box">
 
-<h3>Edit User</h3>
+<h3>Modifier l'utilisateur</h3>
 
 <form method="POST">
 
@@ -111,19 +115,22 @@ name="email"
 value="<?= htmlspecialchars($editUser['email']) ?>"
 required>
 
-<label>
+<label class="checkbox-label">
 
 <input type="checkbox"
 name="admin"
 <?= $editUser['admin'] ? "checked" : "" ?>>
 
-Administrator
+Administrateur
 
 </label>
 
+<div class="form-actions">
 <button type="submit" name="update_user">
-Update User
+Enregistrer
 </button>
+<a href="admin_users.php" class="btn-cancel">Annuler</a>
+</div>
 
 </form>
 
@@ -132,6 +139,7 @@ Update User
 <?php endif; ?>
 
 
+<div class="table-wrap">
 <table>
 
 <thead>
@@ -139,7 +147,7 @@ Update User
 <tr>
 
 <th>ID</th>
-<th>Username</th>
+<th>Nom d'utilisateur</th>
 <th>Email</th>
 <th>Admin</th>
 <th>Actions</th>
@@ -157,24 +165,38 @@ Update User
 <td><?= $user['id'] ?></td>
 <td><?= htmlspecialchars($user['username']) ?></td>
 <td><?= htmlspecialchars($user['email']) ?></td>
-<td><?= $user['admin'] ? "Yes" : "No" ?></td>
+<td>
+    <?php if ($user['admin']): ?>
+        <span class="badge-admin">Admin</span>
+    <?php else: ?>
+        <span class="badge-none">Utilisateur</span>
+    <?php endif; ?>
+</td>
 
 <td>
 
-<a class="btn-edit"
-href="?edit=<?= $user['id'] ?>">Edit</a>
+<div class="actions-cell">
+
+<a class="btn btn-edit"
+href="?edit=<?= $user['id'] ?>">Modifier</a>
 
 <?php if ($user['id'] != $_SESSION['user_id']): ?>
 
-<a class="btn-delete"
+<a class="btn btn-delete"
 href="?delete=<?= $user['id'] ?>"
-onclick="return confirm('Delete this user?')">
+onclick="return confirm('Supprimer cet utilisateur ?')">
 
-Delete
+Supprimer
 
 </a>
 
+<?php else: ?>
+
+<span class="owner-note">C'est toi</span>
+
 <?php endif; ?>
+
+</div>
 
 </td>
 
@@ -185,6 +207,7 @@ Delete
 </tbody>
 
 </table>
+</div>
 
 </div>
 
