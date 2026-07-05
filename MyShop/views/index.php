@@ -26,7 +26,12 @@ if($username){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styless.css">
+    <?php // "?v=..." (date de dernière modification du fichier) force le
+          // navigateur (et le cache de l'hébergeur) à retélécharger le CSS
+          // dès qu'on le modifie, au lieu de resservir une version en cache
+          // avec le même nom de fichier : c'est ce qui faisait qu'un
+          // correctif fonctionnait en local mais pas une fois hébergé. ?>
+    <link rel="stylesheet" href="styless.css?v=<?= @filemtime(__DIR__ . '/styless.css') ?: time() ?>">
     <title>Document</title>
 
 </head>

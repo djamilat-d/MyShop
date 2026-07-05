@@ -24,7 +24,7 @@ $products = $productModel->searchProducts($name, $category, $price, $sort);
     <!-- On réutilise la feuille de style de la boutique pour que cette page
          ait le même look que le reste du site, au lieu de dépendre de
          Bootstrap (chargé depuis un CDN) qui ne s'affichait pas correctement. -->
-    <link rel="stylesheet" href="styless.css">
+    <link rel="stylesheet" href="styless.css?v=<?= @filemtime(__DIR__ . '/styless.css') ?: time() ?>">
 </head>
 <body>
 
