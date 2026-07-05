@@ -69,7 +69,7 @@ $users = $userObj->getAllUsers();
 <meta charset="UTF-8">
 <title>Users Management</title>
 
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
 
 </head>
 

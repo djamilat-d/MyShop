@@ -19,7 +19,7 @@ if (!$produit) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($produit['name']) ?> - MyShop</title>
-    <link rel="stylesheet" href="styless.css?v=<?= @filemtime(__DIR__ . '/styless.css') ?: time() ?>">
+    <link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
 </head>
 <body>
 

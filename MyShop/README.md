@@ -39,10 +39,12 @@ MyShop/
 ├── controllers/        # Actions (ex: suppression de produit)
 ├── models/              # Classes métier (BD, User, Products, Category)
 ├── views/               # Pages affichées (signup, signin, admin, boutique...)
+│   ├── main.css          # Feuille de style unique (boutique + admin)
 │   └── image/            # Images des produits uploadées
-├── assets/              # Images statiques du site
-└── style.css             # Styles de l'espace admin
+└── assets/              # Images statiques du site
 ```
+
+Toutes les pages chargent la même feuille de style, `views/main.css`. Les règles propres à l'admin y sont préfixées par `.admin-layout` pour ne jamais interférer avec le style de la boutique publique.
 
 ## Base de données
 

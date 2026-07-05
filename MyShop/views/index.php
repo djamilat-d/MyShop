@@ -26,12 +26,12 @@ if($username){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php // "?v=..." (date de dernière modification du fichier) force le
-          // navigateur (et le cache de l'hébergeur) à retélécharger le CSS
-          // dès qu'on le modifie, au lieu de resservir une version en cache
-          // avec le même nom de fichier : c'est ce qui faisait qu'un
-          // correctif fonctionnait en local mais pas une fois hébergé. ?>
-    <link rel="stylesheet" href="styless.css?v=<?= @filemtime(__DIR__ . '/styless.css') ?: time() ?>">
+    <?php // Une seule feuille de style pour tout le site (boutique + admin) :
+          // avant il y avait 4 fichiers CSS différents, dont 2 plus utilisés
+          // par personne, ce qui rendait les mises à jour peu fiables.
+          // Le "?v=..." force le navigateur à retélécharger le CSS dès
+          // qu'on le modifie, au lieu de resservir une version en cache. ?>
+    <link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
     <title>Document</title>
 
 </head>
@@ -44,8 +44,8 @@ if($username){
               // ce qu'il y a ici (liens de navigation + connexion/déconnexion) :
               // on regroupe donc les deux dans un seul conteneur, que le burger
               // peut ouvrir/fermer en lui ajoutant/enlevant la classe "open"
-              // (voir le script tout en bas, et les règles .nav-links dans
-              // styless.css). Avant, ces liens disparaissaient simplement en
+              // (voir le script tout en bas, et les règles #navLinks dans
+              // main.css). Avant, ces liens disparaissaient simplement en
               // dessous de 1240px sans aucun moyen de les rouvrir. ?>
         <div class="nav-links" id="navLinks">
             <ul class="liste1">

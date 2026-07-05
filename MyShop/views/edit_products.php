@@ -67,7 +67,7 @@ if(isset($_POST['submit'])){
     <title>Modifier un produit - MyShop</title>
     <!-- Même feuille de style que le reste de l'admin, plutôt que Bootstrap
          en CDN (voir le commentaire dans ajouter_products.php). -->
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
 </head>
 <body>
 

@@ -54,10 +54,10 @@ if(isset($_POST['submit'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Produit - MyShop</title>
-    <!-- On utilise notre propre style.css, pas Bootstrap en CDN : c'est ce
+    <!-- On utilise notre propre main.css, pas Bootstrap en CDN : c'est ce
          qui rendait la page de recherche blanche quand le CDN ne chargeait
          pas, on ne veut pas reproduire ce problème ici. -->
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
 </head>
 <body>
 

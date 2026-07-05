@@ -25,7 +25,7 @@ $produits = $productModel->getAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Produits - MyShop</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
 </head>
 <body>
 

@@ -26,7 +26,7 @@ $isAdmin = !empty($_SESSION['is_admin']);
 
 <title>Admin Dashboard</title>
 
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
 
 </head>
 

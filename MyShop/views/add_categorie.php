@@ -124,7 +124,7 @@ if (isset($_GET['edit'])) {
 
 <title>Ajouter catégorie</title>
 
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="main.css?v=<?= @filemtime(__DIR__ . '/main.css') ?: time() ?>">
 
 </head>
 
