@@ -23,6 +23,12 @@ body {
     background: #1e293b;
 
     padding: 20px;
+
+    /* display:flex + flex-direction:column pour pouvoir pousser le bouton
+       de déconnexion tout en bas avec margin-top:auto (voir .sidebar-logout),
+       peu importe le nombre de liens au-dessus. */
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar h2 {
@@ -72,6 +78,24 @@ body {
     background: #3b82f6;
 
     color: white;
+}
+
+/* Le bouton de déconnexion doit être visuellement à part (pas juste un
+   lien de navigation de plus) : couleur d'alerte, séparé par une bordure,
+   et poussé tout en bas de la sidebar grâce à margin-top:auto sur le
+   conteneur flex .sidebar. */
+.sidebar-logout {
+    margin-top: auto !important;
+    background: #ef4444 !important;
+    color: white !important;
+    text-align: center;
+    font-weight: bold;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 15px !important;
+}
+
+.sidebar-logout:hover {
+    background: #dc2626 !important;
 }
 
 
@@ -593,6 +617,16 @@ tr:hover {
     color: #9ca3af;
     font-size: 0.8em;
     font-style: italic;
+}
+
+/* Boutons Modifier/Supprimer affichés même quand on n'a pas le droit
+   d'agir sur ce produit (pas le créateur, pas admin) : ils restent visibles
+   mais grisés, et le clic déclenche une alerte explicative plutôt que de
+   simplement disparaître, pour que ce soit clair que c'est une restriction
+   volontaire et pas un bug. */
+.btn-locked {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* --- Page "Gestion des utilisateurs" et "Ajouter une catégorie" --- */

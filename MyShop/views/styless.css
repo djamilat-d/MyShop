@@ -83,6 +83,11 @@ a {
     color: #494949 !important;
     position: relative;
     top: 10px;
+    /* Cinzel Decorative a des glyphes très ornés (le M et le S surtout) qui
+       donnent une impression de grand vide entre les lettres, même sans
+       aucun espace dans le HTML. letter-spacing est hérité par les spans
+       enfants, donc un seul réglage ici resserre tout le logo d'un coup. */
+    letter-spacing: -2px;
 }
 
 .style {
@@ -147,6 +152,19 @@ a {
     display: none;
 }
 
+/* --- Menu mobile (burger) ---
+   .nav-links regroupe les liens de navigation (Home/Produits/Solde/Contact)
+   ET les liens de connexion/déconnexion : avant, ces deux blocs disparaissaient
+   simplement sous 1240px sans qu'il y ait un seul moyen de les rouvrir, le
+   burger n'étant relié à aucun script. Le clic sur .menu (voir index.php)
+   ajoute/enlève la classe "open" sur #navLinks, qu'on affiche ici en menu
+   déroulant sous la navbar. */
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 
 /* Pages sans grand header/image (recherche, détail produit) */
 
@@ -192,6 +210,10 @@ a {
     grid-template-columns: repeat(4, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
+    /* Explicite plutôt que de compter sur la valeur par défaut : chaque
+       carte doit s'étirer à la hauteur de la rangée, pas juste à la
+       hauteur de son propre contenu. */
+    align-items: stretch;
 }
 
 .card {
@@ -200,6 +222,16 @@ a {
     background: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease;
+    /* Toutes les cartes d'une même rangée de la grille ont déjà la même
+       hauteur (comportement par défaut de CSS Grid), mais certaines cartes
+       ont un contenu plus court (pas de catégorie, description courte) :
+       sans ça le bouton "Acheter" ne se retrouvait pas à la même hauteur
+       d'une carte à l'autre. En transformant la carte en colonne flex sur
+       toute la hauteur disponible, le lien produit s'étire pour combler
+       l'espace et le bouton reste toujours aligné tout en bas. */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
@@ -210,11 +242,15 @@ a {
     width: 100%;
     height: 240px;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
 .Coombes {
     padding: 15px;
     cursor: pointer;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .Coombes h2 {
@@ -230,6 +266,7 @@ a {
 
 .description {
     margin-top: 5px;
+    flex: 1;
 }
 
 .info {
@@ -391,18 +428,52 @@ a {
         right: 18px;
     }
 
-    .liste1 {
+    /* Caché par défaut, déroulé en dessous de la navbar quand on clique sur
+       le burger (classe .open ajoutée par le script dans index.php). La
+       navbar est en position:fixed, ce qui suffit à en faire le "conteneur"
+       de positionnement pour ce menu en position:absolute.
+
+       Important : on cible #navLinks (id) et pas juste .nav-links (classe).
+       La règle ".navbar div { display:flex; }" plus haut dans le fichier
+       n'est pas dans un @media, donc elle s'applique aussi ici ; et comme
+       ".navbar div" (classe + élément) est PLUS spécifique que ".nav-links"
+       (une seule classe), "display:none" perdait la bataille de spécificité
+       et le menu restait visible en permanence, même sans cliquer sur le
+       burger. Un sélecteur par id passe toujours devant une classe, donc le
+       problème est réglé. */
+    #navLinks {
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        background: rgb(253, 253, 253);
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        padding: 20px 0;
     }
 
-    .btndcon {
-        display: none;
+    #navLinks.open {
+        display: flex;
+    }
+
+    #navLinks .liste1 {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #navLinks .nav-auth {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .menu {
         display: block;
         position: static;
-        
     }
 
     nav ul li a {
@@ -432,28 +503,16 @@ a {
         padding: 12px;
     }
 
-    .liste1 {
-        display: none;
-    }
-
-    .btndcon {
-        display: static;
-    }
-
     .logo {
         position: static;
         font-size: 16px;
-    }
-
-    .menu {
-        display: static;
     }
 
     .grid {
         padding: 20px;
         gap: 15px;
     }
-    
+
 
 }
 

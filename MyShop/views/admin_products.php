@@ -34,12 +34,11 @@ $produits = $productModel->getAll();
     <div class="sidebar">
         <h2 class="sidebar-logo"><span class="styleM">M</span>y<span class="style">~</span><span class="styleS">S</span>hop</h2>
         <a href="admin.php">Dashboard</a>
-        <?php if ($isAdmin): ?>
         <a href="admin_users.php">Users</a>
-        <?php endif; ?>
         <a href="admin_products.php" class="active">Products</a>
+        <a href="index.php">Voir la boutique</a>
         <a href="add_categorie.php">Categories</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" class="sidebar-logout">Se déconnecter</a>
     </div>
 
     <div class="main-content">
@@ -58,6 +57,10 @@ $produits = $productModel->getAll();
 
             <?php if(isset($_GET['success'])): ?>
                 <p class="alert-success">Action effectuée avec succès</p>
+            <?php endif; ?>
+
+            <?php if(isset($_GET['denied'])): ?>
+                <p class="alert-info">Action refusée : tu ne peux modifier ou supprimer que les produits que tu as toi-même ajoutés (sauf si tu es administrateur).</p>
             <?php endif; ?>
 
             <?php if(empty($produits)): ?>
@@ -97,8 +100,14 @@ $produits = $productModel->getAll();
                                 <td class="price-cell"><?= number_format($produit['price'], 0, ',', ' '); ?> FCFA</td>
                                 <td>
                                     <?php
-                                        // On ne montre Modifier/Supprimer que si c'est notre
-                                        // produit, ou qu'on est admin (qui garde tous les droits).
+                                        // Modifier/Supprimer reste réservé à l'auteur du produit
+                                        // (ou à un admin, qui garde tous les droits). Mais plutôt
+                                        // que de simplement cacher les boutons pour les autres, on
+                                        // les affiche quand même et on bloque le clic avec une
+                                        // alerte explicative : sur un site de démonstration, ça
+                                        // permet à quelqu'un qui explore le site de comprendre
+                                        // le système de permissions au lieu de juste se demander
+                                        // pourquoi les boutons ont disparu.
                                         $isOwner = $produit['created_by'] == $_SESSION['user_id'];
                                         $canManage = $isAdmin || $isOwner;
                                     ?>
@@ -111,7 +120,14 @@ $produits = $productModel->getAll();
                                            Supprimer
                                         </a>
                                     <?php else: ?>
-                                        <span class="owner-note">Pas le tien</span>
+                                        <a href="#" class="btn btn-edit btn-locked"
+                                           onclick="alert('Tu ne peux pas modifier ce produit : il n\'a pas été ajouté par toi et tu n\'es pas administrateur.'); return false;">
+                                           Modifier
+                                        </a>
+                                        <a href="#" class="btn btn-delete btn-locked"
+                                           onclick="alert('Tu ne peux pas supprimer ce produit : il n\'a pas été ajouté par toi et tu n\'es pas administrateur.'); return false;">
+                                           Supprimer
+                                        </a>
                                     <?php endif; ?>
                                     </div>
                                 </td>

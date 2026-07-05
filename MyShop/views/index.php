@@ -35,46 +35,62 @@ if($username){
     <nav class="navbar">
         <div class="logo"> <span class="styleM">M</span>y<span class="style">~</span><span class="styleS">s</span>hop
         </div>
-        <ul class="liste1">
-            <li class="active">Home</li>
-            <li> <a href="#produit" class="btndcon">Produits</a></li>
-            <li><a href="" class="btndcon">Solde</a></li>
-            <li><a href="#contact" class="btndcon">Contact</a></li>
+        <?php // Sur mobile/tablette, le menu burger doit pouvoir afficher tout
+              // ce qu'il y a ici (liens de navigation + connexion/déconnexion) :
+              // on regroupe donc les deux dans un seul conteneur, que le burger
+              // peut ouvrir/fermer en lui ajoutant/enlevant la classe "open"
+              // (voir le script tout en bas, et les règles .nav-links dans
+              // styless.css). Avant, ces liens disparaissaient simplement en
+              // dessous de 1240px sans aucun moyen de les rouvrir. ?>
+        <div class="nav-links" id="navLinks">
+            <ul class="liste1">
+                <li class="active">Home</li>
+                <li> <a href="#produit" class="btndcon">Produits</a></li>
+                <li><a href="" class="btndcon">Solde</a></li>
+                <li><a href="#contact" class="btndcon">Contact</a></li>
 
-        </ul>
-        <div>
-            <?php
-           if(isset($_SESSION["user_id"])):
-           ?>
-            <?php // Le lien vers l'admin n'a de sens que pour un admin : un
-                  // client connecté n'a rien à y faire, donc on ne l'affiche
-                  // plus systématiquement à tout le monde comme avant. ?>
-            <?php if(!empty($_SESSION['is_admin'])): ?>
-            <a href="admin.php" class="btndcon">Administrateur</a>
-            <?php endif; ?>
+            </ul>
+            <div class="nav-auth">
+                <?php
+               if(isset($_SESSION["user_id"])):
+               ?>
+                <?php // Tout le monde peut accéder au dashboard une fois
+                      // connecté (admin ou non) : seules certaines actions à
+                      // l'intérieur sont restreintes (voir admin_products.php,
+                      // admin_users.php, add_categorie.php). ?>
+                <a href="admin.php" class="btndcon">Dashboard</a>
 
-            <?php // $message est du texte brut (pas un lien), donc le "gap"
-                  // du flex sur ce <div> ne l'espace pas correctement des
-                  // liens à côté : on l'enveloppe dans un span dédié pour
-                  // pouvoir lui donner sa propre marge. ?>
-            <?php if ($message): ?>
-            <span class="welcome-msg"><?php echo $message; ?></span>
-            <?php endif; ?>
-            <a href="logout.php" class="btndcon">Se deconnecter</a>
+                <?php // $message est du texte brut (pas un lien), donc le "gap"
+                      // du flex sur ce <div> ne l'espace pas correctement des
+                      // liens à côté : on l'enveloppe dans un span dédié pour
+                      // pouvoir lui donner sa propre marge. ?>
+                <?php if ($message): ?>
+                <span class="welcome-msg"><?php echo $message; ?></span>
+                <?php endif; ?>
+                <a href="logout.php" class="btndcon">Se deconnecter</a>
 
-            <?php
-          else:
+                <?php
+              else:
 
-           ?>
-            <a href="signup.php" class="btndcon">S'inscrire</a>
-            <a href="signin.php" class="btndcon">Se connecter</a>
-            <?php endif;?>
+               ?>
+                <a href="signup.php" class="btndcon">S'inscrire</a>
+                <a href="signin.php" class="btndcon">Se connecter</a>
+                <?php endif;?>
+            </div>
         </div>
-        <p>
-
-        </p>
-        <div><img src="image/menu.png" alt="" class="menu"></div>
+        <div>
+            <img src="image/menu.png" alt="Menu" class="menu" id="menuBtn">
+        </div>
     </nav>
+
+    <script>
+        // Ouvre/ferme le menu mobile au clic sur le burger. On utilise
+        // toggle plutôt que deux handlers séparés (open/close) : plus simple
+        // et ça évite les états incohérents si on clique vite plusieurs fois.
+        document.getElementById('menuBtn').addEventListener('click', function () {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+    </script>
     <header >
                 <img src="../assets/luxury2.jpg" alt="" class="heard" >
 
@@ -258,7 +274,7 @@ if($username){
                 <div class="footer_nav">
                     <a href="#">Accueil</a>
                     <a href="#">Produits</a>
-                    <a href="#">Galerie</a>
+                    <a href="#galery">Galerie</a>
                     <a href="#">Contact</a>
                 </div>
 
@@ -269,9 +285,9 @@ if($username){
                 </div>
 
                 <div class="footer_names">
-                    <span>T. Kady</span>
                     <span>D. Djamilat</span>
-                    <span>S. Laurince</span>
+                    <span>K. Laurince</span>
+                    <span>T. Kady</span>
                 </div>
             </div>
         </div>

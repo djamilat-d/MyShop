@@ -66,12 +66,11 @@ if(isset($_POST['submit'])){
     <div class="sidebar">
         <h2 class="sidebar-logo"><span class="styleM">M</span>y<span class="style">~</span><span class="styleS">S</span>hop</h2>
         <a href="admin.php">Dashboard</a>
-        <?php if ($isAdmin): ?>
         <a href="admin_users.php">Users</a>
-        <?php endif; ?>
         <a href="admin_products.php" class="active">Products</a>
+        <a href="index.php">Voir la boutique</a>
         <a href="add_categorie.php">Categories</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" class="sidebar-logout">Se déconnecter</a>
     </div>
 
     <div class="main-content">

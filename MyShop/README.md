@@ -19,9 +19,10 @@ En résumé, l'objectif pédagogique était moins "faire un site qui a l'air jol
 ## Fonctionnalités
 
 - **Authentification** : inscription (`signup.php`) et connexion (`signin.php`) avec mots de passe hashés (bcrypt via `password_hash`), déconnexion sécurisée (destruction de session).
-- **Interface d'administration** (`admin.php`), accessible à tout utilisateur connecté, avec deux niveaux de droits :
-  - **N'importe quel utilisateur connecté** peut ajouter des produits et des catégories, et ne peut modifier/supprimer que les produits qu'il a lui-même ajoutés.
-  - **Seuls les administrateurs** peuvent gérer les utilisateurs (lister, éditer, supprimer, promouvoir en administrateur) et modifier/supprimer n'importe quel produit, y compris ceux ajoutés par d'autres.
+- **Interface d'administration** (`admin.php`), accessible à tout utilisateur connecté, qui voit l'intégralité des sections (Produits, Utilisateurs, Catégories) — seules les actions à l'intérieur changent selon le rôle :
+  - **N'importe quel utilisateur connecté** peut ajouter des produits, et ne peut modifier/supprimer que les produits qu'il a lui-même ajoutés. Il peut aussi consulter la liste des utilisateurs et des catégories, mais pas les modifier.
+  - **Seuls les administrateurs** peuvent gérer les utilisateurs (éditer, supprimer, promouvoir en administrateur), gérer les catégories (créer, modifier, supprimer) et modifier/supprimer n'importe quel produit, y compris ceux ajoutés par d'autres.
+  - Si un utilisateur normal tente une action réservée aux admins (modifier un utilisateur, supprimer une catégorie, toucher au produit d'un autre), une alerte s'affiche pour expliquer pourquoi c'est refusé, plutôt que de le laisser deviner ou de simplement cacher les boutons. Cette vérification est aussi faite côté serveur, pas seulement dans l'alerte, pour éviter qu'elle soit contournée.
 - **Boutique publique** (`index.php`) : affichage des produits, page de détail par produit.
 - **Recherche** (`search.php`) : recherche par nom, catégorie, prix maximum, avec tri (alphabétique, prix croissant/décroissant).
 

@@ -4,35 +4,52 @@ session_start();
 require_once "../models/connexion.php";
 require_once "../models/User.php";
 
-if (!isset($_SESSION['user_id']) || $_SESSION['is_admin'] != 1) {
+// Pas connecté du tout : direction la page de connexion, comme partout ailleurs.
+if (!isset($_SESSION['user_id'])) {
     header("Location: signin.php");
     exit();
 }
+
+// Tout utilisateur connecté peut VOIR cette page (la liste complète des
+// utilisateurs), pour avoir une vue d'ensemble du tableau de bord. Mais
+// modifier ou supprimer un utilisateur reste réservé aux administrateurs :
+// les deux blocs ci-dessous revérifient $isAdmin avant d'écrire quoi que ce
+// soit en base (sécurité réelle), et les boutons Modifier/Supprimer sont en
+// plus bloqués avec une alerte côté interface si on n'est pas admin.
+$isAdmin = !empty($_SESSION['is_admin']);
 
 $userObj = new User($pdo);
 $message = "";
 
 if (isset($_GET['delete'])) {
-    $id = (int) $_GET['delete'];
-    if ($id != $_SESSION['user_id']) {
-        $userObj->deleteUser($id);
-        $message = "User deleted successfully.";
+    if (!$isAdmin) {
+        $message = "Action réservée aux administrateurs : tu ne peux pas supprimer d'utilisateur.";
     } else {
-        $message = "You cannot delete yourself.";
+        $id = (int) $_GET['delete'];
+        if ($id != $_SESSION['user_id']) {
+            $userObj->deleteUser($id);
+            $message = "User deleted successfully.";
+        } else {
+            $message = "You cannot delete yourself.";
+        }
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_user'])) {
-    $id = (int) $_POST['id'];
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $admin = isset($_POST['admin']) ? 1 : 0;
-
-    if (!empty($username) && !empty($email)) {
-        $userObj->updateUser($id, $username, $email, $admin);
-        $message = "User updated.";
+    if (!$isAdmin) {
+        $message = "Action réservée aux administrateurs : tu ne peux pas modifier d'utilisateur.";
     } else {
-        $message = "All fields required.";
+        $id = (int) $_POST['id'];
+        $username = trim($_POST['username']);
+        $email = trim($_POST['email']);
+        $admin = isset($_POST['admin']) ? 1 : 0;
+
+        if (!empty($username) && !empty($email)) {
+            $userObj->updateUser($id, $username, $email, $admin);
+            $message = "User updated.";
+        } else {
+            $message = "All fields required.";
+        }
     }
 }
 
@@ -67,8 +84,9 @@ $users = $userObj->getAllUsers();
 <a href="admin.php">Dashboard</a>
 <a href="admin_users.php" class="active">Users</a>
 <a href="admin_products.php">Products</a>
+<a href="index.php">Voir la boutique</a>
 <a href="add_categorie.php">Categories</a>
-<a href="logout.php">Logout</a>
+<a href="logout.php" class="sidebar-logout">Se déconnecter</a>
 
 </div>
 
@@ -101,7 +119,12 @@ $users = $userObj->getAllUsers();
 
 <h3>Modifier l'utilisateur</h3>
 
-<form method="POST">
+<?php if (!$isAdmin): ?>
+<p class="owner-note" style="margin-bottom: 10px;">Consultation seule : seul un administrateur peut enregistrer ces modifications.</p>
+<?php endif; ?>
+
+<form method="POST"
+<?php if (!$isAdmin): ?> onsubmit="alert('Action réservée aux administrateurs : tu ne peux pas modifier d\'utilisateur.'); return false;"<?php endif; ?>>
 
 <input type="hidden" name="id" value="<?= $editUser['id'] ?>">
 
@@ -177,6 +200,8 @@ Enregistrer
 
 <div class="actions-cell">
 
+<?php if ($isAdmin): ?>
+
 <a class="btn btn-edit"
 href="?edit=<?= $user['id'] ?>">Modifier</a>
 
@@ -193,6 +218,19 @@ Supprimer
 <?php else: ?>
 
 <span class="owner-note">C'est toi</span>
+
+<?php endif; ?>
+
+<?php else: ?>
+
+<a href="#" class="btn btn-edit btn-locked"
+onclick="alert('Action réservée aux administrateurs : tu ne peux pas modifier d\'utilisateur.'); return false;">
+Modifier
+</a>
+<a href="#" class="btn btn-delete btn-locked"
+onclick="alert('Action réservée aux administrateurs : tu ne peux pas supprimer d\'utilisateur.'); return false;">
+Supprimer
+</a>
 
 <?php endif; ?>
 

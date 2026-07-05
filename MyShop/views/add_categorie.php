@@ -3,12 +3,19 @@ session_start();
 
 // Cette page n'avait au départ aucune vérification : n'importe qui, même
 // pas connecté, pouvait ajouter des catégories juste en connaissant l'URL.
-// On exige maintenant d'être connecté (mais pas nécessairement admin :
-// n'importe quel utilisateur peut enrichir le catalogue de catégories).
+// Maintenant : tout utilisateur connecté peut VOIR cette page (formulaire et
+// liste), pour avoir une vue complète du tableau de bord, admin ou pas. Mais
+// créer/modifier/supprimer une catégorie reste réservé aux administrateurs :
+// chaque action ci-dessous revérifie $isAdmin côté serveur avant d'écrire
+// quoi que ce soit (sécurité réelle), et le formulaire/les boutons sont en
+// plus bloqués côté interface avec une alerte explicative si on n'est pas
+// admin, plutôt que d'être simplement cachés.
 if (!isset($_SESSION['user_id'])) {
     header("Location: signin.php");
     exit();
 }
+
+$isAdmin = !empty($_SESSION['is_admin']);
 
 require_once "../models/connexion.php";
 require_once "../models/categorie.php";
@@ -24,16 +31,21 @@ $message_succes = "";
 // bloquer et demander à l'utilisateur de d'abord les déplacer ailleurs.
 if (isset($_GET['delete'])) {
 
-    $deleteId = (int) $_GET['delete'];
-
-    if ($category->countChildren($deleteId) > 0) {
-        $message_erreur = "Impossible de supprimer : cette catégorie a des sous-catégories. Déplace-les ou supprime-les d'abord.";
-    } elseif ($category->countProducts($deleteId) > 0) {
-        $message_erreur = "Impossible de supprimer : des produits sont encore rattachés à cette catégorie.";
+    if (!$isAdmin) {
+        $message_erreur = "Action réservée aux administrateurs : tu ne peux pas supprimer de catégorie.";
     } else {
-        $category->delete($deleteId);
-        header("Location: add_categorie.php?deleted=1");
-        exit();
+
+        $deleteId = (int) $_GET['delete'];
+
+        if ($category->countChildren($deleteId) > 0) {
+            $message_erreur = "Impossible de supprimer : cette catégorie a des sous-catégories. Déplace-les ou supprime-les d'abord.";
+        } elseif ($category->countProducts($deleteId) > 0) {
+            $message_erreur = "Impossible de supprimer : des produits sont encore rattachés à cette catégorie.";
+        } else {
+            $category->delete($deleteId);
+            header("Location: add_categorie.php?deleted=1");
+            exit();
+        }
     }
 }
 
@@ -44,36 +56,46 @@ if (isset($_GET['deleted'])) {
 // Modifier une catégorie existante (formulaire pré-rempli via ?edit=id).
 if (isset($_POST['update_category'])) {
 
-    $id = (int) $_POST['id'];
-    $name = $_POST['name'];
-    $parent = !empty($_POST['parent_id']) ? (int) $_POST['parent_id'] : null;
-
-    // Une catégorie ne peut pas être son propre parent : ça créerait une
-    // boucle infinie le jour où on affiche/parcourt l'arborescence.
-    if ($parent == $id) {
-        $message_erreur = "Une catégorie ne peut pas être sa propre catégorie parente.";
-    } elseif (empty($name)) {
-        $message_erreur = "Le nom de la catégorie est obligatoire.";
+    if (!$isAdmin) {
+        $message_erreur = "Action réservée aux administrateurs : tu ne peux pas modifier de catégorie.";
     } else {
-        $category->update($id, $name, $parent);
-        header("Location: add_categorie.php");
-        exit();
+
+        $id = (int) $_POST['id'];
+        $name = $_POST['name'];
+        $parent = !empty($_POST['parent_id']) ? (int) $_POST['parent_id'] : null;
+
+        // Une catégorie ne peut pas être son propre parent : ça créerait une
+        // boucle infinie le jour où on affiche/parcourt l'arborescence.
+        if ($parent == $id) {
+            $message_erreur = "Une catégorie ne peut pas être sa propre catégorie parente.";
+        } elseif (empty($name)) {
+            $message_erreur = "Le nom de la catégorie est obligatoire.";
+        } else {
+            $category->update($id, $name, $parent);
+            header("Location: add_categorie.php");
+            exit();
+        }
     }
 }
 
 // Créer une nouvelle catégorie.
 if (isset($_POST['name']) && !isset($_POST['update_category']) && !empty($_POST['name'])) {
 
-    $name = $_POST['name'];
-    // Une catégorie sans parent choisi dans le formulaire devient une
-    // catégorie "racine" (parent_id = null), ce qui permet l'arborescence
-    // à profondeur illimitée demandée dans le sujet.
-    $parent = !empty($_POST['parent_id']) ? $_POST['parent_id'] : null;
+    if (!$isAdmin) {
+        $message_erreur = "Action réservée aux administrateurs : tu ne peux pas ajouter de catégorie.";
+    } else {
 
-    $category->add($name, $parent);
+        $name = $_POST['name'];
+        // Une catégorie sans parent choisi dans le formulaire devient une
+        // catégorie "racine" (parent_id = null), ce qui permet l'arborescence
+        // à profondeur illimitée demandée dans le sujet.
+        $parent = !empty($_POST['parent_id']) ? $_POST['parent_id'] : null;
 
-    header("Location: add_categorie.php");
-    exit();
+        $category->add($name, $parent);
+
+        header("Location: add_categorie.php");
+        exit();
+    }
 }
 
 $categories = $category->getAll();
@@ -116,12 +138,11 @@ if (isset($_GET['edit'])) {
 <h2 class="sidebar-logo"><span class="styleM">M</span>y<span class="style">~</span><span class="styleS">S</span>hop</h2>
 
 <a href="admin.php">Dashboard</a>
-<?php if (!empty($_SESSION['is_admin'])): ?>
 <a href="admin_users.php">Users</a>
-<?php endif; ?>
 <a href="admin_products.php">Products</a>
+<a href="index.php">Voir la boutique</a>
 <a href="add_categorie.php" class="active">Categories</a>
-<a href="logout.php">Logout</a>
+<a href="logout.php" class="sidebar-logout">Se déconnecter</a>
 
 </div>
 
@@ -150,8 +171,14 @@ if (isset($_GET['edit'])) {
 <p class="alert-success"><?= htmlspecialchars($message_succes) ?></p>
 <?php endif; ?>
 
+<?php if (!$isAdmin): ?>
+<p class="owner-note" style="margin-bottom: 10px;">Tu peux consulter les catégories, mais seul un administrateur peut en ajouter, modifier ou supprimer.</p>
+<?php endif; ?>
+
 <div class="form-box">
-<form method="POST">
+<form method="POST"
+<?php if (!$isAdmin): ?> onsubmit="alert('Action réservée aux administrateurs : tu ne peux pas ajouter ou modifier de catégorie.'); return false;"<?php endif; ?>>
+
 
 <?php if ($editCategory): ?>
 <input type="hidden" name="id" value="<?= $editCategory->id ?>">
@@ -227,12 +254,23 @@ required>
 </td>
 <td>
     <div class="actions-cell">
+    <?php if ($isAdmin): ?>
         <a class="btn btn-edit" href="?edit=<?= $cate->id ?>">Modifier</a>
         <a class="btn btn-delete"
            href="?delete=<?= $cate->id ?>"
            onclick="return confirm('Supprimer cette catégorie ?')">
            Supprimer
         </a>
+    <?php else: ?>
+        <a href="#" class="btn btn-edit btn-locked"
+           onclick="alert('Action réservée aux administrateurs : tu ne peux pas modifier de catégorie.'); return false;">
+           Modifier
+        </a>
+        <a href="#" class="btn btn-delete btn-locked"
+           onclick="alert('Action réservée aux administrateurs : tu ne peux pas supprimer de catégorie.'); return false;">
+           Supprimer
+        </a>
+    <?php endif; ?>
     </div>
 </td>
 
